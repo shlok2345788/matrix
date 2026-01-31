@@ -76,7 +76,8 @@ export default function ContactForm({ onClose }) {
 
     try {
       // POST to backend endpoint
-      const response = await fetch('/api/contact', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+      const response = await fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
