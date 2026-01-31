@@ -7,32 +7,9 @@ dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 3001
-const allowedOrigins = (process.env.CORS_ORIGIN || '')
-  .split(',')
-  .map((origin) => origin.trim())
-  .filter(Boolean)
-
-const isOriginAllowed = (origin) => {
-  if (allowedOrigins.length === 0) return true
-  return allowedOrigins.some((entry) => {
-    if (entry === '*') return true
-    if (entry.includes('*')) {
-      const pattern = entry
-        .replace(/[.+?^${}()|[\]\\]/g, '\\$&')
-        .replace(/\*/g, '.*')
-      return new RegExp(`^${pattern}$`).test(origin)
-    }
-    return entry === origin
-  })
-}
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true)
-      if (isOriginAllowed(origin)) return callback(null, true)
-      return callback(null, false)
-    },
+    origin: true,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type']
   })
