@@ -163,12 +163,30 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [theme, setTheme] = useState('dark')
   const [showContactForm, setShowContactForm] = useState(false)
+  const [backendStatus, setBackendStatus] = useState('checking')
   const mouse = useRef({ x: 0, y: 0 })
   const cursorRef = useRef(null)
 
   useEffect(() => {
     const timeout = setTimeout(() => setLoading(false), 1600)
     return () => clearTimeout(timeout)
+  }, [])
+
+  useEffect(() => {
+    const checkBackend = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+        const response = await fetch(`${apiUrl}/api/health`)
+        if (response.ok) {
+          setBackendStatus('connected')
+        } else {
+          setBackendStatus('error')
+        }
+      } catch (error) {
+        setBackendStatus('offline')
+      }
+    }
+    checkBackend()
   }, [])
 
   useEffect(() => {
@@ -292,6 +310,12 @@ function App() {
         >
           {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
         </button>
+        <div className={`backend-status ${backendStatus}`}>
+          {backendStatus === 'connected' && '🟢 Backend Online'}
+          {backendStatus === 'offline' && '🔴 Backend Offline'}
+          {backendStatus === 'error' && '🟡 Backend Error'}
+          {backendStatus === 'checking' && '⚪ Checking...'}
+        </div>
       </header>
 
       <section className="about section">
