@@ -76,7 +76,7 @@ export default function ContactForm({ onClose }) {
 
     try {
       // POST to backend endpoint
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://matrix-6.onrender.com'
       const response = await fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
         headers: {
